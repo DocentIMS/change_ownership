@@ -1,0 +1,115 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xml:lang="en" lang="en"
+      metal:use-macro="context/prefs_main_template/macros/master"
+      i18n:domain="plone.app.changeownership">
+
+<body>
+
+<div metal:fill-slot="prefs_configlet_main">
+
+  <dl class="portalMessage info"
+      role="alert"
+      tal:condition="view/status">
+    <dt i18n:translate="">Info</dt>
+    <dd tal:repeat="msg view/status" tal:content="msg">Message</dd>
+  </dl>
+
+  <h1 class="documentFirstHeading" i18n:translate="">Change Ownership</h1>
+
+  <div class="documentDescription" i18n:translate="">
+      This form will help you to pass ownership of objects owned by old users to a new user.
+  </div>
+
+  <form action="./change-owner" method="post">
+    <div class="form-group field">
+      <label for="path" i18n:translate="">Path filter</label>
+      <input type="text" name="path" id="path" size="50"
+             class="form-control"
+             tal:attributes="value view/path_filter" />
+      <small class="form-text text-muted formHelp" i18n:translate="path_help">
+          Insert an absolute path starting from the portal root (for example: &quot;/events&quot;).
+          Only contents inside this subtree will be touched.
+      </small>
+    </div>
+
+    <div class="form-group field">
+       <label for="oldowners" i18n:translate="">The old owners:</label>
+       <select name="oldowners" id="oldowners" multiple="multiple" class="form-control">
+         <tal:loop tal:repeat="author view/list_authors">
+          <option tal:content="author/name" tal:attributes="value author/id; selected author/selected">author</option>
+         </tal:loop>
+       </select>
+    </div>
+
+    <div class="form-group field">
+       <label for="newowner" i18n:translate="">The new owner:</label>
+       <select name="newowner" id="newowner" class="form-control">
+         <tal:loop tal:repeat="member view/list_members">
+          <option tal:content="member/name" tal:attributes="value member/id; selected member/selected">member</option>
+         </tal:loop>
+       </select>
+    </div>
+
+    <div class="form-check field">
+       <input type="checkbox"
+              class="form-check-input"
+              name="delete_old_creators:boolean"
+              id="delete_old_creators"
+              tal:attributes="checked view/delete_old_creators" />
+       <label class="form-check-label" for="delete_old_creators" i18n:translate="">Remove old owners from the creators list</label>
+    </div>
+
+    <div class="form-check field">
+       <input type="checkbox"
+              class="form-check-input"
+              name="delete_old_owners:boolean"
+              id="delete_old_owners"
+              tal:attributes="checked view/delete_old_owners" />
+       <label class="form-check-label" for="delete_old_owners" i18n:translate="">Remove the 'owner role' for the old owners</label>
+    </div>
+
+    <div class="form-check field">
+       <input type="checkbox"
+              class="form-check-input"
+              name="exclude_members_folder:boolean"
+              id="exclude_members_folder"
+              tal:attributes="checked view/exclude_members_folder" />
+       <label class="form-check-label" for="exclude_members_folder" i18n:translate="">Exclude members folder</label>
+    </div>
+
+    <div class="form-check field">
+       <input type="checkbox"
+              class="form-check-input"
+              name="change_modification_date:boolean"
+              id="change_modification_date"
+              tal:attributes="checked view/change_modification_date" />
+       <label class="form-check-label" for="change_modification_date" i18n:translate="">Change the modification date</label>
+    </div>
+
+    <div class="form-check field">
+       <input type="checkbox"
+              class="form-check-input"
+              name="dry_run:boolean"
+              id="dry_run"
+              tal:attributes="checked view/dry_run" />
+       <label class="form-check-label" for="dry_run" i18n:translate="">Perform as Dry Run</label>
+    </div>
+
+    <div class="formControls">
+      <input type="submit"
+             name="submit"
+             value="Change Ownership"
+             class="btn btn-primary submit-button"
+             i18n:attributes="value"
+         />
+    </div>
+
+  </form>
+
+</div>
+
+</body>
+</html>
