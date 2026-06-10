@@ -92,7 +92,7 @@ class ChangeOwnershipTestCase(unittest.TestCase):
     def test_keep_old_creators_by_default(self):
         """Default: new owner is prepended, old creator is kept."""
         self._change(oldowners=[TEST_USER_ID], newowner='user')
-        creators = self.portal.page.Creators()
+        creators = self.portal.page.listCreators()
         self.assertEqual(creators[0], 'user')
         self.assertIn(TEST_USER_ID, creators)
 
@@ -100,7 +100,7 @@ class ChangeOwnershipTestCase(unittest.TestCase):
         """delete_old_creators=True removes the old creator entirely."""
         self._change(oldowners=[TEST_USER_ID], newowner='user',
                      delete_old_creators=True)
-        creators = self.portal.page.Creators()
+        creators = self.portal.page.listCreators()
         self.assertEqual(tuple(creators), ('user',))
         self.assertNotIn(TEST_USER_ID, creators)
 
@@ -172,9 +172,14 @@ class ChangeOwnershipTestCase(unittest.TestCase):
 
     def test_list_authors_and_members(self):
         view = self._view()
-        author_ids = [a['id'] for a in view.list_authors()]
+        # list_authors() must faithfully mirror the catalog's Creator values.
+        expected_authors = sorted(
+            c for c in self.portal.portal_catalog.uniqueValuesFor('Creator')
+            if c)
+        author_ids = sorted(a['id'] for a in view.list_authors())
+        self.assertEqual(author_ids, expected_authors)
+        # 'user' is a site member, so it must appear among selectable members.
         member_ids = [m['id'] for m in view.list_members()]
-        self.assertIn(TEST_USER_ID, author_ids)
         self.assertIn('user', member_ids)
 
     # -- helpers for the members-folder tests -----------------------------
