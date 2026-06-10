@@ -15,6 +15,10 @@ Changelog
 - Fixed an incorrect assertion in ``test_fake_oldusers`` (``assertTrue`` with a
   message argument never compared the value).
 - Added a GitHub Actions workflow running the tests against Plone 6.2.
+- Migrated to PEP 420 native namespace packages: removed the
+  ``plone``/``plone.app`` ``__init__.py`` stubs and ``namespace_packages``,
+  switched to ``find_namespace_packages``. No longer needs the
+  ``horse-with-no-namespace`` shim on modern Python.
 
 
 2.0 (2026-06-08)

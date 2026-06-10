@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 version = '2.0'
 
@@ -35,8 +35,7 @@ setup(name='plone.app.changeownership',
       author_email='mustapha@headnet.dk',
       url='https://github.com/collective/plone.app.changeownership',
       license='GPL',
-      packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['plone', 'plone.app'],
+      packages=find_namespace_packages(include=['plone', 'plone.*']),
       include_package_data=True,
       zip_safe=False,
       python_requires='>=3.8',
