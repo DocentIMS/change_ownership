@@ -109,6 +109,14 @@ class ChangeOwner(BrowserView):
         new_owner = self.request.form.get('newowner', '')
         path = self.request.form.get('path', '')
         dryrun = self.request.form.get('dry_run', '')
+        # These options are rendered as Zope ":boolean" checkboxes. An
+        # unchecked checkbox is *absent* from the request, so we read it
+        # straight from the form with a default that represents the unchecked
+        # state. (The exclude_members_folder()/dry_run() view methods provide
+        # the checked-by-default state used only when rendering the form; using
+        # the True-defaulting method here made "Exclude members folder"
+        # impossible to turn off.)
+        exclude_members = self.request.form.get('exclude_members_folder', False)
         ret = ''
 
         self.status = []
@@ -138,7 +146,7 @@ class ChangeOwner(BrowserView):
 
             count = 0
             for brain in self.catalog(**query):
-                if self.exclude_members_folder() and members_folder_path and \
+                if exclude_members and members_folder_path and \
                    brain.getPath().startswith(members_folder_path):
                     #we dont want to change ownership for the members folder
                     #and its contents

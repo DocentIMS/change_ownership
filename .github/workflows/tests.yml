@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+        plone-version: ["6.2-latest"]
+    name: Plone ${{ matrix.plone-version }} / Python ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install Plone + add-on (test extras), pinned to the release
+        env:
+          CONSTRAINTS: https://dist.plone.org/release/${{ matrix.plone-version }}/constraints.txt
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          # This package uses old-style (pkg_resources) namespace packages,
+          # which need the compatibility shim to coexist with Plone's native
+          # (PEP 420) plone.* namespaces on modern Python. See README.
+          pip install horse-with-no-namespace
+          pip install -e ".[test]" -c "$CONSTRAINTS"
+          pip install zope.testrunner -c "$CONSTRAINTS"
+
+      - name: Run tests
+        run: |
+          zope-testrunner --test-path="$GITHUB_WORKSPACE" \
+            -s plone.app.changeownership -vvv

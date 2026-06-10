@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2.1 (unreleased)
+----------------
+
+- Bug fix: "Exclude members folder" can now be turned off. The option is a
+  ``:boolean`` checkbox (absent when unchecked), but ``change_owner()`` read it
+  via the ``exclude_members_folder()`` method, which defaults to ``True`` --
+  so unchecking it had no effect and the members folder was always excluded.
+- Expanded the test suite to cover the option flags (dry-run,
+  delete_old_creators, delete_old_owners, change_modification_date),
+  the path filter, validation errors, string ``oldowners``, and the members
+  folder exclusion (including a regression test for the fix above).
+- Fixed an incorrect assertion in ``test_fake_oldusers`` (``assertTrue`` with a
+  message argument never compared the value).
+- Added a GitHub Actions workflow running the tests against Plone 6.2.
+
+
 2.0 (2026-06-08)
 ----------------
 
