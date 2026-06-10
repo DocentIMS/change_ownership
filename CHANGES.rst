@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1 (unreleased)
+2.1 (2026-06-09)
 ----------------
 
 - Bug fix: "Exclude members folder" can now be turned off. The option is a

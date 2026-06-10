@@ -1,6 +1,6 @@
 from setuptools import setup, find_namespace_packages
 
-version = '2.0'
+version = '2.1'
 
 tests_require = [
     'plone.app.testing',
@@ -19,6 +19,7 @@ setup(name='plone.app.changeownership',
         "Framework :: Plone :: Addon",
         "Framework :: Plone :: 6.0",
         "Framework :: Plone :: 6.1",
+        "Framework :: Plone :: 6.2",
         "Programming Language :: Python",
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: GNU General Public License (GPL)",
